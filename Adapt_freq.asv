@@ -1,0 +1,39 @@
+%% Neural Control Oscillator
+% Adaptive Frequency 
+
+%% Clear
+clc;
+clear all;
+close all;
+
+%% Define Parameters
+out = [];
+x_dot = 0.0; 
+y_dot = 0.0; 
+w_dot = 0.0; 
+y = 0.0;
+E = 0.5;
+delta = 50;
+q = 1;
+w = 35;
+x = 1.0;
+%initial setup
+tstep = 0.01;
+mu = 1.0;
+time = 20;
+
+for i = 1:tstep:time
+F = sin(20*t); 
+% === Dynamical System ===
+x_dot = (mu-(x*x+y*y))*x-w*y+E*F;
+y_dot = (mu-(x*x+y*y))*y+w*x;
+w_dot = -1*E*F*(y/(sqrt(x*x+y*y)));
+% ========== End ==========
+x = x + tstep*x_dot;
+y = y + tstep*y_dot;
+w = w + tstep*w_dot;
+out(i) = x;
+
+error = w-wd;
+end
+

@@ -18,33 +18,32 @@ w22 = alpha*cos(phi);
 t = 2000;
 time = 1:t;
 count = 0;
-H1 = 0.01;
-H2 = 0;
+H = [0.01;0];
 for i=1:length(time)-1
 
 % % === Dynamical System ===
-% a1(i+1) = w11*H1(i)+w12*H2(i);
-% a2(i+1) = w22*H2(i)+w21*H1(i);
-% H1(i+1) = tanh(a1(i+1));
-% H2(i+1) = tanh(a2(i+1));
+% a1 = w11*o1+w12*o2;
+% a2 = w22*o2+w21*o1;
+% o1 = tanh(a1);
+% o2 = tanh(a2);
 % % ========== End ==========
+
 % === Dynamical System ===
-H1(i+1) = tanh(w11*H1(i)+w12*H2(i));
-H2(i+1) = tanh(w22*H2(i)+w21*H1(i));
+H = [H [tanh(w11*H(1,i)+w12*H(2,i));...
+        tanh(w22*H(2,i)+w21*H(1,i))]];                   
 % ========== End ==========
 
 end
 
 %CPG Plot
 figure
-plot(time,H1,'-');
+plot(time,H(1,:),'-');
 hold on
-plot(time,H2);
+plot(time,H(2,:));
 xlim([300 500]);
 grid on;
 xlabel("Time[steps]")
 ylabel("CPG")
 title("SO2")
-disp(max(H1)) 
-figure,plot(H1,H2,'-o')
+figure,plot(H(1,:),H(2,:),'-o')
 
